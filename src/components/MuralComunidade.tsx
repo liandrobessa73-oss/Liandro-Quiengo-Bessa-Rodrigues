@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { CATEGORIES } from '../data';
 import { Publication } from '../types';
+import { saveFirestorePublication } from '../firebase';
 
 interface MuralComunidadeProps {
   currentUser: {
@@ -88,11 +89,13 @@ export const MuralComunidade: React.FC<MuralComunidadeProps> = ({
     setPublicationsList(prev => prev.map(pub => {
       if (pub.id === id) {
         const liked = !pub.likedByUser;
-        return {
+        const updated = {
           ...pub,
           likes: liked ? pub.likes + 1 : pub.likes - 1,
           likedByUser: liked
         };
+        saveFirestorePublication(updated);
+        return updated;
       }
       return pub;
     }));
@@ -142,6 +145,7 @@ export const MuralComunidade: React.FC<MuralComunidadeProps> = ({
       };
 
       setPublicationsList(prev => [newPublication, ...prev]);
+      saveFirestorePublication(newPublication);
       setIsSubmitting(false);
       setContent('');
       setSelectedImagePreset('');

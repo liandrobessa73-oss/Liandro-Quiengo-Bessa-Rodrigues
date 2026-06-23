@@ -1,12 +1,111 @@
 import { Provider, Publication } from './types';
 
 export const CATEGORIES = [
-  { id: 'limpeza', label: 'Limpeza', iconId: 'Sparkles', color: '#0052cc' },
-  { id: 'eletricista', label: 'Electricista', iconId: 'Zap', color: '#feaa00' },
-  { id: 'canalizacao', label: 'Canalização', iconId: 'Wrench', color: '#004b59' },
-  { id: 'ac_frio', label: 'AC & Frio', iconId: 'Wind', color: '#00b8d9' },
-  { id: 'mecanica', label: 'Mecânica', iconId: 'Car', color: '#825500' },
-  { id: 'estafetas', label: 'Estafetas', iconId: 'Truck', color: '#ba1a1a' }
+  { 
+    id: 'limpeza', 
+    label: 'Limpeza', 
+    iconId: 'Sparkles', 
+    color: '#0052cc',
+    imageUrl: 'https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'eletricista', 
+    label: 'Electricista', 
+    iconId: 'Zap', 
+    color: '#feaa00',
+    imageUrl: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'canalizacao', 
+    label: 'Canalização & Pichelaria', 
+    iconId: 'Wrench', 
+    color: '#004b59',
+    imageUrl: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'ac_frio', 
+    label: 'AC & Frio', 
+    iconId: 'Wind', 
+    color: '#00b8d9',
+    imageUrl: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'mecanica', 
+    label: 'Mecânica Auto', 
+    iconId: 'Car', 
+    color: '#825500',
+    imageUrl: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'estafetas', 
+    label: 'Estafetas & Entregas', 
+    iconId: 'Truck', 
+    color: '#ba1a1a',
+    imageUrl: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'jardinagem', 
+    label: 'Jardinagem & Piscinas', 
+    iconId: 'Leaf', 
+    color: '#10b981',
+    imageUrl: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'carpintaria', 
+    label: 'Carpintaria & Marcenaria', 
+    iconId: 'Hammer', 
+    color: '#b45309',
+    imageUrl: 'https://images.unsplash.com/photo-1460135426161-9fb93e214cfd?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'pintura', 
+    label: 'Pintura & Acabamentos', 
+    iconId: 'Paintbrush', 
+    color: '#6366f1',
+    imageUrl: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'pedreiro', 
+    label: 'Pedreiro & Ladrilhador', 
+    iconId: 'HardHat', 
+    color: '#475569',
+    imageUrl: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'ti_informatica', 
+    label: 'TI & Computadores', 
+    iconId: 'Laptop', 
+    color: '#3b82f6',
+    imageUrl: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'explicacoes', 
+    label: 'Explicações & Aulas', 
+    iconId: 'BookOpen', 
+    color: '#ec4899',
+    imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'estetica', 
+    label: 'Cabelo & Estética', 
+    iconId: 'Scissors', 
+    color: '#d946ef',
+    imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'babysitter', 
+    label: 'Babysitter & Cuidados', 
+    iconId: 'Baby', 
+    color: '#06b6d4',
+    imageUrl: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&q=80&w=600'
+  },
+  { 
+    id: 'reparacao_eletro', 
+    label: 'Reparação de Eletrodomésticos', 
+    iconId: 'Tv', 
+    color: '#f97316',
+    imageUrl: 'https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&q=80&w=600'
+  }
 ];
 
 export const MOCK_PROVIDERS: Provider[] = [

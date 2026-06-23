@@ -43,11 +43,50 @@ import {
   Bell,
   HelpCircle,
   Edit2,
-  Upload
+  Upload,
+  Leaf,
+  Hammer,
+  Paintbrush,
+  HardHat,
+  Laptop,
+  BookOpen,
+  Scissors,
+  Baby,
+  Tv
 } from 'lucide-react';
 import { MOCK_PROVIDERS, CATEGORIES, INITIAL_PUBLICATIONS } from './data';
 import { Provider, Service, BookingState, Publication } from './types';
 import { MuralComunidade } from './components/MuralComunidade';
+import { 
+  getFirestoreProviders, 
+  saveFirestoreProvider, 
+  getFirestorePublications, 
+  saveFirestorePublication, 
+  getFirestoreBookings, 
+  saveFirestoreBooking, 
+  deleteFirestoreBooking 
+} from './firebase';
+
+const CategoryIcon: React.FC<{ iconId: string; className?: string }> = ({ iconId, className = "w-5 h-5" }) => {
+  switch (iconId) {
+    case 'Sparkles': return <Sparkles className={className} />;
+    case 'Zap': return <Zap className={className} />;
+    case 'Wrench': return <Wrench className={className} />;
+    case 'Wind': return <Wind className={className} />;
+    case 'Car': return <Car className={className} />;
+    case 'Truck': return <Truck className={className} />;
+    case 'Leaf': return <Leaf className={className} />;
+    case 'Hammer': return <Hammer className={className} />;
+    case 'Paintbrush': return <Paintbrush className={className} />;
+    case 'HardHat': return <HardHat className={className} />;
+    case 'Laptop': return <Laptop className={className} />;
+    case 'BookOpen': return <BookOpen className={className} />;
+    case 'Scissors': return <Scissors className={className} />;
+    case 'Baby': return <Baby className={className} />;
+    case 'Tv': return <Tv className={className} />;
+    default: return <Wrench className={className} />;
+  }
+};
 
 const ServiLinkLogo: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => {
   return (
@@ -175,6 +214,29 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [activeProfileModal, setActiveProfileModal] = useState<'none' | 'edit-profile' | 'history' | 'payment' | 'addresses' | 'notifications' | 'security' | 'faq' | 'support'>('none');
 
+  // Carregar dados iniciais a partir do Firebase Firestore
+  useEffect(() => {
+    async function loadFirebaseData() {
+      try {
+        const provs = await getFirestoreProviders(MOCK_PROVIDERS);
+        setProvidersState(provs);
+        if (provs.length > 0) {
+          setSelectedProvider(provs[0]);
+          setSelectedService(provs[0].services[1]);
+        }
+
+        const pubs = await getFirestorePublications(INITIAL_PUBLICATIONS);
+        setPublicationsList(pubs);
+
+        const books = await getFirestoreBookings();
+        setBookingsList(books);
+      } catch (err) {
+        console.error("Erro initializing Firebase data: ", err);
+      }
+    }
+    loadFirebaseData();
+  }, []);
+
   // Quick feedback alerts
   const [alertMsg, setAlertMsg] = useState<{type: 'success' | 'error' | 'info', text: string} | null>(null);
 
@@ -255,6 +317,7 @@ export default function App() {
     };
 
     setBookingsList([newBooking, ...bookingsList]);
+    saveFirestoreBooking(newBooking);
     setCurrentView('success');
     window.scrollTo(0, 0);
   };
@@ -264,6 +327,9 @@ export default function App() {
       showAlert('Por favor, escreva um pequeno comentário sobre a sua experiência.', 'error');
       return;
     }
+
+    let updatedBookToSave: any = null;
+    let updatedProvToSave: Provider | null = null;
 
     setBookingsList(prev => prev.map(book => {
       if (book.id === bookingId) {
@@ -283,12 +349,14 @@ export default function App() {
               const updatedTestimonials = [newTestimonial, ...(p.testimonials || [])];
               const sum = updatedTestimonials.reduce((acc, t) => acc + t.rating, 0);
               const avg = Number((sum / updatedTestimonials.length).toFixed(1));
-              return {
+              const updatedProv = {
                 ...p,
                 rating: avg,
                 reviewCount: updatedTestimonials.length,
                 testimonials: updatedTestimonials
               };
+              updatedProvToSave = updatedProv;
+              return updatedProv;
             }
             return p;
           }));
@@ -309,15 +377,27 @@ export default function App() {
           }
         }
 
-        return {
+        const updatedBook = {
           ...book,
           status: 'Concluído',
           rating: ratingStars,
           reviewText: ratingComment
         };
+        updatedBookToSave = updatedBook;
+        return updatedBook;
       }
       return book;
     }));
+
+    // Sincronizar as atualizações no Banco de Dados Firestore
+    setTimeout(() => {
+      if (updatedBookToSave) {
+        saveFirestoreBooking(updatedBookToSave);
+      }
+      if (updatedProvToSave) {
+        saveFirestoreProvider(updatedProvToSave);
+      }
+    }, 100);
 
     showAlert('Muito obrigado pela sua avaliação! O seu testemunho foi publicado no perfil do especialista.', 'success');
     setRatingBookingId(null);
@@ -636,16 +716,8 @@ export default function App() {
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 md:gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-6">
                 {CATEGORIES.map((cat) => {
-                  const bgImage = 
-                    cat.id === 'limpeza' ? 'https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?auto=format&fit=crop&q=80&w=600' :
-                    cat.id === 'eletricista' ? 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=600' :
-                    cat.id === 'canalizacao' ? 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=600' :
-                    cat.id === 'ac_frio' ? 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&q=80&w=600' :
-                    cat.id === 'mecanica' ? 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80&w=600' :
-                    'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&q=80&w=600';
-                  
                   return (
                     <button
                       key={cat.id}
@@ -658,7 +730,7 @@ export default function App() {
                     >
                       {/* Realistic Service Background Image */}
                       <img 
-                        src={bgImage} 
+                        src={cat.imageUrl || 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&q=80&w=600'} 
                         alt={cat.label} 
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         referrerPolicy="no-referrer"
@@ -669,12 +741,7 @@ export default function App() {
                       {/* Floating Glassmorphism Icon + Title */}
                       <div className="relative z-10 space-y-2.5 w-full">
                         <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md text-white border border-white/20 flex items-center justify-center group-hover:bg-primary group-hover:border-primary group-hover:text-white transition-all duration-300 shadow-sm">
-                          {cat.id === 'limpeza' && <Sparkles className="w-5 h-5" />}
-                          {cat.id === 'eletricista' && <Zap className="w-5 h-5" />}
-                          {cat.id === 'canalizacao' && <Wrench className="w-5 h-5" />}
-                          {cat.id === 'ac_frio' && <Wind className="w-5 h-5" />}
-                          {cat.id === 'mecanica' && <Car className="w-5 h-5" />}
-                          {cat.id === 'estafetas' && <Truck className="w-5 h-5" />}
+                          <CategoryIcon iconId={cat.iconId} className="w-5 h-5" />
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="font-display text-sm font-black tracking-tight text-white block">
@@ -2158,14 +2225,9 @@ export default function App() {
                                 onChange={(e) => setSignUpSpeciality(e.target.value)}
                                 className="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg text-xs outline-none text-on-surface font-semibold"
                               >
-                                <option value="Canalização & Pichelaria">Canalização & Pichelaria</option>
-                                <option value="Instalações Elétricas">Instalações Elétricas</option>
-                                <option value="Pintura & Decor">Pintura e Acabamentos</option>
-                                <option value="Ar Condicionado & Refrigeração">Ar Condicionado & Refrigeração</option>
-                                <option value="Pedreiro & Ladrilhador">Pedreiro & Ladrilhador</option>
-                                <option value="Limpeza Residencial/Industrial">Limpeza de Casas e Escritórios</option>
-                                <option value="Mecânica de Viaturas">Mecânico Auto</option>
-                                <option value="Serralharia Geral">Serralheiro de Ferro/Alumínio</option>
+                                {CATEGORIES.map(cat => (
+                                  <option key={cat.id} value={cat.label}>{cat.label}</option>
+                                ))}
                                 <option value="Outros Serviços Gerais">Outro Serviço Útil</option>
                               </select>
                             </div>
@@ -2692,6 +2754,7 @@ export default function App() {
                               <button
                                 onClick={() => {
                                   setBookingsList(bookingsList.filter(b => b.id !== book.id));
+                                  deleteFirestoreBooking(book.id);
                                   showAlert(`Reserva ${book.id} cancelada com sucesso.`, 'info');
                                 }}
                                 className="text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg text-xs font-bold transition"
@@ -3158,14 +3221,9 @@ export default function App() {
                             onChange={(e) => setCurrentUser({ ...currentUser!, speciality: e.target.value })}
                             className="w-full border border-outline-variant bg-surface-container-lowest rounded-lg p-2 text-xs outline-none focus:border-primary text-on-surface font-semibold"
                           >
-                            <option value="Canalização & Pichelaria">Canalização & Pichelaria</option>
-                            <option value="Instalações Elétricas">Instalações Elétricas</option>
-                            <option value="Pintura & Decor">Pintura & Acabamentos</option>
-                            <option value="Ar Condicionado & Refrigeração">Ar Condicionado & Refrigeração</option>
-                            <option value="Pedreiro & Ladrilhador">Pedreiro & Ladrilhador</option>
-                            <option value="Limpeza Residencial/Industrial">Limpeza Residencial/Industrial</option>
-                            <option value="Mecânica de Viaturas">Mecânica de Viaturas</option>
-                            <option value="Serralharia Geral">Serralharia Geral</option>
+                            {CATEGORIES.map(cat => (
+                              <option key={cat.id} value={cat.label}>{cat.label}</option>
+                            ))}
                             <option value="Outros Serviços Gerais">Outro Serviço Geral</option>
                           </select>
                         </div>
