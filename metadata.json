@@ -1,0 +1,6 @@
+{
+  "name": "ServiLink Professional Service System",
+  "description": "Sistema moderno e intuitivo de prestação de serviços e agendamentos profissionais em Luanda, Angola.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
