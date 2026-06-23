@@ -1,0 +1,47 @@
+<svg viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#2563EB" />
+      <stop offset="50%" stopColor="#3B82F6" />
+      <stop offset="100%" stopColor="#1E3A8A" />
+    </linearGradient>
+  </defs>
+  
+  {/* Pin head and body with stylish bottom-left gap */}
+  <path
+    d="M 25 74 C 18 67, 14 58, 14 48 C 14 28, 30 12, 50 12 C 70 12, 86 28, 86 48 C 86 68, 70 84, 50 102 C 45 97, 39 91, 35 85"
+    stroke="url(#logoGrad)"
+    strokeWidth="8.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />
+  
+  {/* Interactive Network 'S' Ribbon */}
+  <path
+    d="M 58 38 M 58 38 H 48 C 41 38, 37 42, 37 48 C 37 54, 41 54, 48 54 H 54 C 61 54, 65 58, 65 64 C 65 72, 59 72, 48 72 H 32"
+    stroke="url(#logoGrad)"
+    strokeWidth="8.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />
+
+  {/* Top Node Connection circle */}
+  <circle 
+    cx="58" 
+    cy="38" 
+    r="9" 
+    fill="white" 
+    stroke="url(#logoGrad)" 
+    strokeWidth="5.5" 
+  />
+
+  {/* Bottom Node Connection circle */}
+  <circle 
+    cx="32" 
+    cy="72" 
+    r="9" 
+    fill="white" 
+    stroke="url(#logoGrad)" 
+    strokeWidth="5.5" 
+  />
+</svg>
