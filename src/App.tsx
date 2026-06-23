@@ -762,7 +762,7 @@ export default function App() {
             <section className="bg-surface-container-low/40 py-16 border-y border-outline-variant">
               <div className="max-w-[1280px] mx-auto px-md md:px-lg">
                 <div className="mb-8">
-                  <span className="text-primary font-bold text-xs uppercase tracking-wider block mb-1">Mural da Comunidade</span>
+                  <span className="text-primary font-bold text-xs uppercase tracking-wider block mb-1">PUBLICAÇÕES</span>
                   <h2 className="font-display text-xl md:text-2xl lg:text-3xl font-extrabold text-on-surface tracking-tight">
                     Novidades & Publicações dos Prestadores
                   </h2>
